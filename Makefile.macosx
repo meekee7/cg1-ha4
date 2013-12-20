@@ -1,0 +1,17 @@
+EXECUTABLE = cg1_ex4_mac
+CC = g++
+CPPFLAGS= -O3 -DMACOSX -Iglm-0.9.4.0 -I/usr/X11R6/include/
+DEPS = glm-0.9.4.0/glm/glm.hpp glm-0.9.4.0/glm/gtc/constants.inl Context.h Texture.h Image.hpp GLSLShader.h
+OBJ = cg1_ex4.o Context.o Texture.o Image.o GLSLShader.o
+LIBS= -framework OpenGL -lglew -L/usr/X11R6/lib -lglut
+
+%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CPPFLAGS)
+
+$(EXECUTABLE): $(OBJ)
+	$(CC) -o $@ $^ $(CPPFLAGS) $(LIBS)
+
+.PHONY: clean
+
+clean:
+	rm -f *.o *~ $(EXECUTABLE)
