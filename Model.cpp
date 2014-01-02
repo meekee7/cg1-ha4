@@ -41,7 +41,7 @@ bool Mesh::loadOff(const char* filename){
 		for (int i = 0; i < nodes; i++)
 		if (getline(modelfile, line)){
 			std::istringstream istr(line);
-			std::memset(node[i].normal, 0.0f, 3 * sizeof GLfloat);
+			std::memset(node[i].normal, 0, 3 * sizeof GLfloat);
 			istr >> node[i].node[0] >> node[i].node[1] >> node[i].node[2];
 		}
 		else {
@@ -169,7 +169,7 @@ void Mesh::printmesh(){
 	cout << "Polygons: \n";
 	for (int i = 0; i < polygons; i++)
 	{
-		cout << i << ": with "<< polygon[i].size << " Nodes: ";
+		cout << i << ": with " << polygon[i].size << " Nodes: ";
 		for (int j = 0; j < polygon[i].size; j++)
 			cout << polygon[i].nodes[j] << " ";
 		cout << "Normal " << polygon[i].normal[0] << " " << polygon[i].normal[1] << " " << polygon[i].normal[2] << "\n";
