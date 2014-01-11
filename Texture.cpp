@@ -1,14 +1,14 @@
 /* ----------------------------------------------------------------
-   name:           Texture.cpp
-   purpose:        texturing tutorial
-   'introduction to computer graphics'
-   winter term 2012/2013, assignment 4
-   version:	   SKELETON CODE
-   TODO:           see XXX
-   author:         katrin lang
-   computer graphics
-   tu berlin
-   ------------------------------------------------------------- */
+name:           Texture.cpp
+purpose:        texturing tutorial
+'introduction to computer graphics'
+winter term 2012/2013, assignment 4
+version:	   SKELETON CODE
+TODO:           see XXX
+author:         katrin lang
+computer graphics
+tu berlin
+------------------------------------------------------------- */
 
 #ifdef __APPLE__ 
 #include <GL/glew.h>
@@ -38,9 +38,10 @@ using namespace std;
 static const float PI = 3.14159265358979323846264338327950288f;
 
 // current state of mouse action
-static enum{
+typedef enum{
 	ROTATE, SHIFT_XY, SHIFT_Z, SCALE, NO_DRAG, DRAW, ERASE
-} drag = NO_DRAG;
+} dragstate;
+static dragstate drag = NO_DRAG;
 
 static bool showTexture = true;
 static bool textureCorrection = true;
@@ -136,15 +137,16 @@ void Common::keyPressed(unsigned char key, int x, int y){
 // XXX: NEEDS TO BE IMPLEMENTED
 static void fullScreenQuad(){
 	// XXX
+	GLfloat depth = 1.0f;
 	glBegin(GL_QUADS); {
 		glTexCoord2f(0.0f, 0.0f);
-		glVertex2f(0.0f, 0.0f);
+		glVertex3f(0.0f, 0.0f, depth);
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex2f(0.0f, screen.y);
+		glVertex3f(0.0f, screen.y, depth);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex2f(screen.x, screen.y);
+		glVertex3f(screen.x, screen.y, depth);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex2f(screen.x, 0.0f);
+		glVertex3f(screen.x, 0.0f, depth);
 	}glEnd();
 	// INSERT YOUR CODE HERE
 
@@ -182,7 +184,7 @@ void Texture::reshape(int width, int height){
 
 	screen = vec2(width, height);
 }
-bool notset = true;
+bool notset = 1;
 // display texture
 // XXX: NEEDS TO BE IMPLEMENTED
 void Texture::display(void){
@@ -191,15 +193,15 @@ void Texture::display(void){
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glClearColor(0.5, 0.5, 0.5, 1.0);
+	//glClearColor(0.5, 0.5, 0.5, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	//glEnable(GL_LIGHTING);
 	// display texture
 	// XXX
-	if (false){
-	//if (!notset){
-		notset = false;
-		texture.load(textures[13]);
+	//if (false){
+	if (notset){
+		notset = 0;
+		texture.load(textures[8]);
 		texture.generateTexture();
 	}
 	glEnable(GL_TEXTURE_2D);
@@ -553,7 +555,7 @@ void World::menu(int value){
 	case 13:
 		// load model from models[value]
 		// XXX
-		
+
 		// INSERT YOUR CODE HERE
 
 		// END XXX
