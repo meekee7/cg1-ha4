@@ -53,28 +53,36 @@ void Image::generateTexture(){
 	if (textureID == 0){
 		// generate texture id
 		// XXX
-
+		glGenTextures(1, &textureID);
+		this->bind();
 		// INSERT YOUR CODE HERE
 
 		// END XXX
 	}
-
+	//this->bind();
 	// texture filtering and repeat
 	// XXX
-
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	this->setMinFilter(GL_NEAREST);
+	this->setMagFilter(GL_NEAREST);
 	// INSERT YOUR CODE HERE
 
 	// END XXX
 
 	//enable automatic mipmap generation
 	// XXX
-
+	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, this->width, this->height, GL_RGBA, GL_FLOAT, &data[0]);
 	// INSERT YOUR CODE HERE
 
 	// END XXX
 
 	// upload texture data
 	// XXX
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	this->setModulation(GL_DECAL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this->width, this->height, 0, GL_RGBA, GL_FLOAT, &data[0]);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB, GL_UNSIGNED_BYTE, &data[0]);
 
 	// INSERT YOUR CODE HERE
 
@@ -86,7 +94,7 @@ void Image::setMinFilter(GLuint min){
 
 	// set texture parameter
 	// XXX
-
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, this->min);
 	// INSERT YOUR CODE HERE
 
 	// END XXX
@@ -100,7 +108,7 @@ void Image::setMagFilter(GLuint mag){
 
 	// set texture parameter
 	// XXX
-
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, this->mag);
 	// INSERT YOUR CODE HERE
 
 	// END XXX
@@ -108,6 +116,7 @@ void Image::setMagFilter(GLuint mag){
 
 void Image::setModulation(GLuint modulation){
 	this->modulate = modulation;
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, (GLfloat) this->modulate);
 }
 
 // bind texture
@@ -116,12 +125,13 @@ void Image::bind(){
 	// bind texture
 	// XXX
 	// INSERT YOUR CODE HERE
-
+	glBindTexture(GL_TEXTURE_2D, this->textureID);
 	// END XXX
 
 	// set modulation
 	// XXX
-
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	this->setModulation(GL_DECAL);
 	// INSERT YOUR CODE HERE
 
 	// END XXX
@@ -131,7 +141,7 @@ void Image::bind(){
 // XXX: NEEDS TO BE IMPLEMENTED
 void Image::unbind(){
 	// XXX
-
+	glBindTexture(GL_TEXTURE_2D, 0);
 	// INSERT YOUR CODE HERE
 
 	// END XXX
@@ -142,9 +152,8 @@ void Image::unbind(){
 vec4 Image::get(unsigned int x, unsigned int y){
 
 	// XXX
-
 	// INSERT YOUR CODE HERE 
-	return vec4(0);
+	return data[this->height*y + x];;
 
 	// END XXX
 }

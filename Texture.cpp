@@ -136,7 +136,16 @@ void Common::keyPressed(unsigned char key, int x, int y){
 // XXX: NEEDS TO BE IMPLEMENTED
 static void fullScreenQuad(){
 	// XXX
-
+	glBegin(GL_QUADS); {
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex2f(0.0f, 0.0f);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex2f(0.0f, screen.y);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex2f(screen.x, screen.y);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex2f(screen.x, 0.0f);
+	}glEnd();
 	// INSERT YOUR CODE HERE
 
 
@@ -173,7 +182,7 @@ void Texture::reshape(int width, int height){
 
 	screen = vec2(width, height);
 }
-
+bool notset = true;
 // display texture
 // XXX: NEEDS TO BE IMPLEMENTED
 void Texture::display(void){
@@ -187,9 +196,17 @@ void Texture::display(void){
 
 	// display texture
 	// XXX
-
+	if (false){
+	//if (!notset){
+		notset = false;
+		texture.load(textures[13]);
+		texture.generateTexture();
+	}
+	glEnable(GL_TEXTURE_2D);
+	texture.bind();
+	fullScreenQuad();
+	glDisable(GL_TEXTURE_2D);
 	// INSERT YOUR CODE HERE
-
 	// END XXX
 
 	glutSwapBuffers();
@@ -206,7 +223,14 @@ void Texture::mouseDragged(int x, int y){
 
 	// paint on texture
 	// XXX
-
+	switch (drag){
+	case DRAW:
+		texture.paint((float)x, (float)(screen.y - y));
+		break;
+	case ERASE:
+		texture.erase((float)x, (float)(screen.y - y));
+		break;
+	}
 	// INSERT YOUR CODE HERE
 
 	// END XXX
@@ -258,7 +282,30 @@ void Texture::menu(int value){
 	case 18:
 		drag = ERASE;
 		break;
-
+	case 19:
+		texture.setMagFilter(GL_NEAREST);
+		break;
+	case 20:
+		texture.setMagFilter(GL_LINEAR);
+		break;
+	case 21:
+		texture.setMinFilter(GL_NEAREST);
+		break;
+	case 22:
+		texture.setMinFilter(GL_LINEAR);
+		break;
+	case 23:
+		texture.setMinFilter(GL_NEAREST_MIPMAP_NEAREST);
+		break;
+	case 24:
+		texture.setMinFilter(GL_LINEAR_MIPMAP_NEAREST);
+		break;
+	case 25:
+		texture.setMinFilter(GL_NEAREST_MIPMAP_LINEAR);
+		break;
+	case 26:
+		texture.setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
+		break;
 		// add cases for texture filtering
 		// XXX
 
@@ -506,7 +553,7 @@ void World::menu(int value){
 	case 13:
 		// load model from models[value]
 		// XXX
-
+		
 		// INSERT YOUR CODE HERE
 
 		// END XXX
