@@ -31,6 +31,7 @@
 #include "Context.hpp"
 #include "Texture.hpp"
 #include "Image.hpp"
+#include "Model.hpp"
 
 using namespace glm;
 using namespace std;
@@ -173,21 +174,30 @@ vec2 Texture::previousMouse; // previous mouse position
 
 void Texture::reshape(int width, int height){
 
-	glMatrixMode(GL_PROJECTION);
+	/*glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
 	// Set the viewport to be the entire window
 	glViewport(0, 0, width, height);
 
-	gluOrtho2D(0, width, 0, height);
+	gluOrtho2D(0, width, 0, height);*/
 
 	screen = vec2(width, height);
 }
-bool deftex = true;
+
+bool usedefaulttex = true;
 // display texture
 // XXX: NEEDS TO BE IMPLEMENTED
 void Texture::display(void){
-	Texture::reshape(screen.x, screen.y);
+	//Texture::reshape(screen.x, screen.y);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	// Set the viewport to be the entire window
+	glViewport(0, 0, screen.x, screen.y);
+
+	gluOrtho2D(0, screen.x, 0, screen.y);
+
 	// setup model matrix
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -197,11 +207,10 @@ void Texture::display(void){
 
 	// display texture
 	// XXX
-	//if (false){
-	if (deftex) {
+	if (usedefaulttex) {
 		texture.load(textures[13]);
 		texture.generateTexture();
-		deftex = false;
+		usedefaulttex = false;
 	}
 	// INSERT YOUR CODE HERE
 	glEnable(GL_TEXTURE_2D);
@@ -325,14 +334,15 @@ string World::menuText[] = { "    reset", "MODEL", "    Plane", "    Spiky Spher
 int World::numOptions = sizeof(World::menuOptions) / sizeof(World::menuOptions[0]);
 
 static string models[] = { "", "", "data/4cow.off", "data/auto3.off", "data/bunny2.off", "data/cone.off", "data/cow.off", "data/cowboyhut.off", "data/MEGADRACHE.off", "data/Schachfigur.off", "data/tempel.off", "data/tasse.off", "data/spaceshuttle.off", "data/sphere.off" };
-
+int meshnumber = 0;
+Mesh* meshes[14];
 
 vec2 World::previousMouse;
 
 void World::reshape(int width, int height){
 
 	// setup projection matrix
-	glMatrixMode(GL_PROJECTION);
+	/*glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
 	// Set the viewport to be the entire window
@@ -348,7 +358,7 @@ void World::reshape(int width, int height){
 
 	//position the camera at (0,0,cameraZ) looking down the
 	//negative z-axis at (0,0,0)
-	cameraMatrix = lookAt(vec3(0.0, 0.0, cameraZ), vec3(0.0, 0.0, 0.0), vec3(0.0, 1.0, 0.0));
+	cameraMatrix = lookAt(vec3(0.0, 0.0, cameraZ), vec3(0.0, 0.0, 0.0), vec3(0.0, 1.0, 0.0));*/
 
 	screen = vec2(width, height);
 }
@@ -356,9 +366,48 @@ void World::reshape(int width, int height){
 // display callback
 // XXX: NEEDS TO BE IMPLEMENTED
 void World::display(void){
-	World::reshape(screen.x, screen.y);
+	if (meshes[meshnumber] == nullptr && meshnumber != 0 && meshnumber != 1){
+		//Draw a loading screen
+		glClearColor(0.2, 0.2, 0.2, 0.0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glDisable(GL_LIGHTING);
+		glColor3ub(255, 255, 255);
+		glRasterPos2i(30, 30);
+		char loading[] = "LOADING MODEL, PLEASE WAIT";
+		for (char* s = loading; *s; s++)
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *s);
+		glEnable(GL_LIGHTING);
+		glutSwapBuffers();
+
+		//now actually load mesh
+		meshes[meshnumber] = new Mesh();
+		meshes[meshnumber]->loadOff(models[meshnumber]);
+		meshes[meshnumber]->setRenderMode(Mesh::TEXTURE_RENDERER);
+	}
+
+	//World::reshape(screen.x, screen.y);
+	// setup projection matrix
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	// Set the viewport to be the entire window
+	glViewport(0, 0, screen.x, screen.y);
+
+	cameraZ = 1 / tan(fov / 180.0);
+
+	// near and far plane
+	nearPlane = cameraZ / 10.0;
+	farPlane = cameraZ*10.0;
+
+	gluPerspective(fov, (float)screen.x / (float)screen.y, nearPlane, farPlane);
+
+	//position the camera at (0,0,cameraZ) looking down the
+	//negative z-axis at (0,0,0)
+	cameraMatrix = lookAt(vec3(0.0, 0.0, cameraZ), vec3(0.0, 0.0, 0.0), vec3(0.0, 1.0, 0.0));
 	glClearColor(0.2, 0.2, 0.2, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -420,10 +469,16 @@ void World::display(void){
 	else glDisable(GL_LIGHTING);
 
 	// draw the geometry
+	
 
 	// if showTexture is true, enable texturing in opengl
 	// XXX
-
+	if (meshnumber != 0 && meshnumber != 1){
+		if (showTexture)
+			glEnable(GL_TEXTURE_2D);
+		meshes[meshnumber]->render();
+		glDisable(GL_TEXTURE_2D);
+	}
 	// INSERT YOUR CODE HERE
 
 	// END XXX
@@ -545,7 +600,7 @@ void World::menu(int value){
 	case 13:
 		// load model from models[value]
 		// XXX
-
+		meshnumber = value;
 		// INSERT YOUR CODE HERE
 
 		// END XXX
@@ -554,7 +609,7 @@ void World::menu(int value){
 	case 14:
 		// no model should be displayed with this option selected
 		// XXX
-
+		meshnumber = 0;
 		// INSERT YOUR CODE HERE
 
 		// END XXX

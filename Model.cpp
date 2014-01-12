@@ -20,7 +20,7 @@ Mesh::~Mesh()
 	delete node;
 }
 
-bool Mesh::loadOff(const char* filename){
+bool Mesh::loadOff(std::string filename){
 	ifstream modelfile(filename);
 	if (modelfile.is_open()) {
 		string line; //Using short-circuit-or intentionally here
@@ -95,8 +95,21 @@ bool Mesh::loadOff(const char* filename){
 			return false;
 		} //error handling because line is missing
 		modelfile.close();
-		for (int i = 0; i < nodes; i++) //Normalize vertex normal vectors
+		for (int i = 0; i < nodes; i++) {//Normalize vertex normal vectors
 			this->normalizevector(node[i].normal);
+			{ //Calculate spherical texture coordinates
+				const GLfloat pi = 3.1415926f; //TODO get this correctly done
+				GLfloat vlength = 2.0f * sqrtf(node[i].normal[0] * node[i].normal[0] + node[i].normal[1] * node[i].normal[1] + (1.0f + node[i].normal[2]) * (1.0f + node[i].normal[2]));
+				node[i].tex[0] = node[i].normal[0] / vlength + 0.5f; //http://www.unc.edu/~zimmons/cs238/maps/environment.html
+				node[i].tex[1] = node[i].normal[1] / vlength + 0.5f;
+				//node[i].tex[0] = asin(node[i].normal[0]) / pi + 0.5f; //http://www.mvps.org/directx/articles/spheremap.htm
+				//node[i].tex[1] = asin(node[i].normal[1]) / pi + 0.5f;
+				//node[i].tex[0] = atan2(node[i].node[0], node[i].node[1]) / pi * 0.5f;
+				//node[i].tex[1] = asin(node[i].node[2]) / pi + 0.5f;
+				//node[i].tex[0] = pi + atan2(node[i].normal[1], node[i].normal[0]) / (2 * pi);
+				//node[i].tex[1] = atan2(sqrtf(node[i].normal[0] * node[i].normal[0] + node[i].normal[1] * node[i].normal[1]), node[i].normal[2]) / pi;
+			}
+		}
 	}
 	else
 		return false; //error because file was not opened
@@ -116,6 +129,10 @@ void Mesh::render(){
 	case GOURAUD_RENDERER:
 		glShadeModel(GL_SMOOTH);
 		this->renderSmooth();
+		break;
+	case TEXTURE_RENDERER:
+		glShadeModel(GL_SMOOTH);
+		this->renderTextured();
 		break;
 	}
 }
@@ -152,6 +169,18 @@ void Mesh::renderSmooth(){
 	for (int i = 0; i < polygons; i++){
 		glBegin(GL_TRIANGLES); {
 			for (int j = 0; j < polygon[i].size; j++){
+				glNormal3f(node[polygon[i].nodes[j]].normal[0], node[polygon[i].nodes[j]].normal[1], node[polygon[i].nodes[j]].normal[2]);
+				glVertex3f(node[polygon[i].nodes[j]].node[0], node[polygon[i].nodes[j]].node[1], node[polygon[i].nodes[j]].node[2]);
+			}
+		} glEnd();
+	}
+}
+
+void Mesh::renderTextured(){
+	for (int i = 0; i < polygons; i++){
+		glBegin(GL_TRIANGLES); {
+			for (int j = 0; j < polygon[i].size; j++){
+				glTexCoord2f(node[polygon[i].nodes[j]].tex[0], node[polygon[i].nodes[j]].tex[1]);
 				glNormal3f(node[polygon[i].nodes[j]].normal[0], node[polygon[i].nodes[j]].normal[1], node[polygon[i].nodes[j]].normal[2]);
 				glVertex3f(node[polygon[i].nodes[j]].node[0], node[polygon[i].nodes[j]].node[1], node[polygon[i].nodes[j]].node[2]);
 			}
