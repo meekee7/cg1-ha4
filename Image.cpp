@@ -1,14 +1,14 @@
 /* ----------------------------------------------------------------
-name:           Image.cpp
-purpose:        texturing tutorial
-'introduction to computer graphics'
-winter term 2012/2013, assignment 4
-version:	   SKELETON CODE
-TODO:           texture and mipmap generation, texture filtering, modulation, texel get, painting in texture
-author:         katrin lang
-computer graphics
-tu berlin
-------------------------------------------------------------- */
+   name:           Image.cpp
+   purpose:        texturing tutorial
+   'introduction to computer graphics'
+   winter term 2012/2013, assignment 4
+   version:	   SKELETON CODE
+   TODO:           texture and mipmap generation, texture filtering, modulation, texel get, painting in texture
+   author:         katrin lang
+   computer graphics
+   tu berlin
+   ------------------------------------------------------------- */
 
 #ifdef _WIN32
 #include "win32/GL/glew.h"
@@ -54,11 +54,14 @@ void Image::generateTexture(){
 		// generate texture id
 		// XXX
 		glGenTextures(1, &textureID);
+		cout << "id " << textureID << " generiert\n";
+		this->bind();
+
 		// INSERT YOUR CODE HERE
 
 		// END XXX
 	}
-	this->bind();
+
 	// texture filtering and repeat
 	// XXX
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -78,10 +81,9 @@ void Image::generateTexture(){
 
 	// upload texture data
 	// XXX
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	this->setModulation(GL_DECAL);
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this->width, this->height, 0, GL_RGBA, GL_FLOAT, &data[0]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB, GL_UNSIGNED_BYTE, &data[0]);
-
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this->width, this->height, 0, GL_RGBA, GL_FLOAT, &data[0]);
 	// INSERT YOUR CODE HERE
 
 	// END XXX
@@ -114,7 +116,6 @@ void Image::setMagFilter(GLuint mag){
 
 void Image::setModulation(GLuint modulation){
 	this->modulate = modulation;
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, (GLfloat) this->modulate);
 }
 
 // bind texture
@@ -123,13 +124,12 @@ void Image::bind(){
 	// bind texture
 	// XXX
 	// INSERT YOUR CODE HERE
-	glBindTexture(GL_TEXTURE_2D, this->textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
 	// END XXX
-
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, this->modulate);
 	// set modulation
 	// XXX
-	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	//this->setModulation(GL_DECAL);
+
 	// INSERT YOUR CODE HERE
 
 	// END XXX
@@ -150,8 +150,9 @@ void Image::unbind(){
 vec4 Image::get(unsigned int x, unsigned int y){
 
 	// XXX
+
 	// INSERT YOUR CODE HERE 
-	return data[this->height*y + x];;
+	return vec4(0);
 
 	// END XXX
 }

@@ -1,14 +1,14 @@
 /* ----------------------------------------------------------------
-name:           Texture.cpp
-purpose:        texturing tutorial
-'introduction to computer graphics'
-winter term 2012/2013, assignment 4
-version:	   SKELETON CODE
-TODO:           see XXX
-author:         katrin lang
-computer graphics
-tu berlin
-------------------------------------------------------------- */
+   name:           Texture.cpp
+   purpose:        texturing tutorial
+   'introduction to computer graphics'
+   winter term 2012/2013, assignment 4
+   version:	   SKELETON CODE
+   TODO:           see XXX
+   author:         katrin lang
+   computer graphics
+   tu berlin
+   ------------------------------------------------------------- */
 
 #ifdef __APPLE__ 
 #include <GL/glew.h>
@@ -35,7 +35,7 @@ tu berlin
 using namespace glm;
 using namespace std;
 
-static const float PI = 3.14159265358979323846264338327950288f;
+static const float PI = 3.14159265358979323846264338327950288;
 
 // current state of mouse action
 typedef enum{
@@ -111,19 +111,19 @@ void Common::keyPressed(unsigned char key, int x, int y){
 		break;
 
 	case 's':
-		scaling *= 0.9f;
+		scaling *= 0.9;
 		break;
 
 	case 'S':
-		scaling *= 1.1f;
+		scaling *= 1.1;
 		break;
 
 	case 'c':
-		cameraZMap += 0.1f;
+		cameraZMap += 0.1;
 		break;
 
 	case 'C':
-		cameraZMap -= 0.1f;
+		cameraZMap -= 0.1;
 		break;
 
 	default:
@@ -137,20 +137,19 @@ void Common::keyPressed(unsigned char key, int x, int y){
 // XXX: NEEDS TO BE IMPLEMENTED
 static void fullScreenQuad(){
 	// XXX
-	GLfloat depth = 1.0f;
+
+	// INSERT YOUR CODE HERE
+	GLfloat depth = 0.0f;
 	glBegin(GL_QUADS); {
 		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(0.0f, 0.0f, depth);
+		glVertex2f(0.0f, 0.0f);
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(0.0f, screen.y, depth);
+		glVertex2f(0.0f, screen.y);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(screen.x, screen.y, depth);
+		glVertex2f(screen.x, screen.y);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(screen.x, 0.0f, depth);
+		glVertex2f(screen.x, 0.0f);
 	}glEnd();
-	// INSERT YOUR CODE HERE
-
-
 	// END XXX
 }
 
@@ -184,33 +183,32 @@ void Texture::reshape(int width, int height){
 
 	screen = vec2(width, height);
 }
-bool notset = 1;
+bool deftex = true;
 // display texture
 // XXX: NEEDS TO BE IMPLEMENTED
 void Texture::display(void){
-
+	Texture::reshape(screen.x, screen.y);
 	// setup model matrix
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	//glClearColor(0.5, 0.5, 0.5, 1.0);
+	glClearColor(0.5, 0.5, 0.5, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glEnable(GL_LIGHTING);
+
 	// display texture
 	// XXX
 	//if (false){
-	if (notset){
-		notset = 0;
-		texture.load(textures[8]);
+	if (deftex) {
+		texture.load(textures[13]);
 		texture.generateTexture();
+		deftex = false;
 	}
+	// INSERT YOUR CODE HERE
 	glEnable(GL_TEXTURE_2D);
 	texture.bind();
 	fullScreenQuad();
 	glDisable(GL_TEXTURE_2D);
-	// INSERT YOUR CODE HERE
 	// END XXX
-
 	glutSwapBuffers();
 }
 
@@ -225,14 +223,7 @@ void Texture::mouseDragged(int x, int y){
 
 	// paint on texture
 	// XXX
-	switch (drag){
-	case DRAW:
-		texture.paint((float)x, (float)(screen.y - y));
-		break;
-	case ERASE:
-		texture.erase((float)x, (float)(screen.y - y));
-		break;
-	}
+
 	// INSERT YOUR CODE HERE
 
 	// END XXX
@@ -347,11 +338,11 @@ void World::reshape(int width, int height){
 	// Set the viewport to be the entire window
 	glViewport(0, 0, width, height);
 
-	cameraZ = 1 / tan(fov / 180.0f);
+	cameraZ = 1 / tan(fov / 180.0);
 
 	// near and far plane
-	nearPlane = cameraZ / 10.0f;
-	farPlane = cameraZ*10.0f;
+	nearPlane = cameraZ / 10.0;
+	farPlane = cameraZ*10.0;
 
 	gluPerspective(fov, (float)width / (float)height, nearPlane, farPlane);
 
@@ -365,8 +356,8 @@ void World::reshape(int width, int height){
 // display callback
 // XXX: NEEDS TO BE IMPLEMENTED
 void World::display(void){
-
-	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
+	World::reshape(screen.x, screen.y);
+	glClearColor(0.2, 0.2, 0.2, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glMatrixMode(GL_MODELVIEW);
@@ -451,7 +442,6 @@ void World::display(void){
 
 		// draw a textured quad
 		// XXX
-
 		// INSERT YOUR CODE HERE     
 
 
@@ -505,17 +495,17 @@ void World::mouseDragged(int x, int y){
 		break;
 	case SHIFT_XY:
 		if (false){
-			shift.x += 3.3f*v.x;
-			shift.y -= 3.3f*v.y;
+			shift.x += 3.3*v.x;
+			shift.y -= 3.3*v.y;
 		}
 		else{
-			shift.x += 3.3f*v.x;
-			shift.y -= 3.3f*v.y;
+			shift.x += 3.3*v.x;
+			shift.y -= 3.3*v.y;
 		}
 		break;
 	case SHIFT_Z:
-		if (false) shift.z -= 3.3f*sign(dot(v, vec2(1, 1))) * length(v);
-		else shift.z += 3.3f*sign(dot(v, vec2(1, 1))) * length(v);
+		if (false) shift.z -= 3.3*sign(dot(v, vec2(1, 1))) * length(v);
+		else shift.z += 3.3*sign(dot(v, vec2(1, 1))) * length(v);
 		break;
 	case SCALE:
 		if (false) scaling -= sign(dot(v, vec2(1, 1))) * length(v);
