@@ -82,8 +82,16 @@ static vec3 cursor = vec3(1, 0, 0);
 // XXX: NEEDS TO BE IMPLEMENTED
 static void updateCursor(int x, int y){
 
-	// XXX
-
+	// XXX //TODO coordinates are completely wrong
+	float u = (float)x / screen.x;
+	float v = (float)y / screen.y;
+	float u_rad = 2 * PI * u;
+	cursor.x = sin(u_rad - PI / 2);
+	cursor.z = sin(u_rad);
+	// y goes from +1 (north) to -1 (south)
+	// v from 0 to 1, hence:
+	// *2 to expand range, -1 to shift range & the whole *(-1) to flip it
+	cursor.y = -(v * 2 - 1);
 	// INSERT YOUR CODE HERE
 
 
@@ -234,7 +242,10 @@ void Texture::mouseDragged(int x, int y){
 
 	// paint on texture
 	// XXX
-
+	if (drag == DRAW)
+		texture.paint(x / screen.x, (screen.y - y) / screen.y);
+	if (drag == ERASE)
+		texture.erase(x / screen.x, (screen.y - y) / screen.y);
 	// INSERT YOUR CODE HERE
 
 	// END XXX
@@ -460,7 +471,19 @@ void World::display(void){
 
 	// draw cursor
 	// XXX
-
+	if (true) {
+		glDisable(GL_LIGHTING);
+		glDisable(GL_TEXTURE_2D);
+		glBegin(GL_LINES); {
+			GLfloat endpoint[3] = { cursor.x, cursor.y, cursor.z };
+			Mesh::normalizevector(endpoint);
+			for (int i = 0; i < 3; i++)
+				endpoint[i] *= 1.1f;
+			glColor3ub(255, 255, 0);
+			glVertex3f(0.0f, 0.0f, 0.0f);
+			glVertex3fv(endpoint); //TODO actual values
+		}glEnd();
+	}
 	// INSERT YOUR CODE HERE
 
 	// END XXX

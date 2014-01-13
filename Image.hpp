@@ -75,6 +75,10 @@ protected:
   GLuint min;
   GLuint modulate;
 
+  const int brushrad = 5;
+  bool drawmode;
+  std::vector<glm::vec4> drawlayer;
+
   // read a pixel from image
   glm::vec4 get(unsigned int x, unsigned int y);
 

@@ -14,6 +14,8 @@ public:
 	};
 	void setRenderMode(RenderMode mode);
 	void render();
+
+	static void normalizevector(GLfloat* vector);
 	
 private:
 	typedef struct {
@@ -35,6 +37,5 @@ private:
 	void renderFlat();
 	void renderSmooth();
 	void renderTextured();
-	void normalizevector(GLfloat* vector);
 	void crossproduct(GLfloat* a, GLfloat* b, GLfloat* result);
 };
