@@ -31,7 +31,7 @@
 #include "Context.hpp"
 #include "Texture.hpp"
 #include "Image.hpp"
-#include "Mesh.hpp"
+#include "Model.hpp"
 
 using namespace glm;
 using namespace std;

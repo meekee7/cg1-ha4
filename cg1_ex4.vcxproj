@@ -15,14 +15,14 @@
     <ClCompile Include="Context.cpp" />
     <ClCompile Include="GLSLShader.cpp" />
     <ClCompile Include="Image.cpp" />
-    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Context.hpp" />
     <ClInclude Include="GLSLShader.h" />
     <ClInclude Include="Image.hpp" />
-    <ClInclude Include="Mesh.hpp" />
+    <ClInclude Include="Model.hpp" />
     <ClInclude Include="Texture.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

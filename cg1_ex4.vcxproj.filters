@@ -6,13 +6,13 @@
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="GLSLShader.cpp" />
-    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Model.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Context.hpp" />
     <ClInclude Include="Image.hpp" />
     <ClInclude Include="Texture.hpp" />
     <ClInclude Include="GLSLShader.h" />
-    <ClInclude Include="Mesh.hpp" />
+    <ClInclude Include="Model.hpp" />
   </ItemGroup>
 </Project>
