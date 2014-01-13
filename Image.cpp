@@ -25,7 +25,7 @@
 using namespace std;
 using namespace glm;
 
-Image::Image() : width(0), height(0), wrap(GL_CLAMP_TO_BORDER), min(GL_LINEAR), mag(GL_LINEAR), modulate(GL_MODULATE), textureID(0), drawmode(false){
+Image::Image() : width(0), height(0), wrap(GL_CLAMP_TO_BORDER), min(GL_LINEAR), mag(GL_LINEAR), modulate(GL_MODULATE), textureID(0){
 }
 
 Image::Image(int width, int height)
@@ -37,8 +37,6 @@ Image::Image(int width, int height)
 , mag(GL_LINEAR)
 , modulate(GL_MODULATE)
 , textureID(0)
-, drawmode(false)
-, drawlayer(width*height)
 {}
 
 Image::Image(const std::string& filename) : wrap(GL_CLAMP_TO_BORDER), min(GL_LINEAR), mag(GL_LINEAR), modulate(GL_MODULATE), textureID(0){
@@ -179,7 +177,7 @@ void Image::erase(float x, float y){
 	x *= this->width;
 	y *= this->height;
 	// INSERT YOUR CODE HERE
-	glm::vec4 texpixel = this->get(x, y);
+	glm::vec4 texpixel = this->get((unsigned int)x, (unsigned int)y);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, (GLint)x, (GLint)y, 1, 1, GL_RGBA, GL_FLOAT, &texpixel);
 	// END XXX
 }
@@ -193,8 +191,6 @@ void Image::load(const std::string& filename){
 		cerr << "file " << filename << " is not a PPM file" << endl;
 		return;
 	}
-
-	drawlayer.resize(width*height);
 }
 
 void Image::loadPPM(const std::string& filename){
