@@ -4,15 +4,15 @@
     <ClCompile Include="cg1_ex4.cpp" />
     <ClCompile Include="Context.cpp" />
     <ClCompile Include="Image.cpp" />
-    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="GLSLShader.cpp" />
+    <ClCompile Include="Mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Context.hpp" />
     <ClInclude Include="Image.hpp" />
-    <ClInclude Include="Model.hpp" />
     <ClInclude Include="Texture.hpp" />
     <ClInclude Include="GLSLShader.h" />
+    <ClInclude Include="Mesh.hpp" />
   </ItemGroup>
 </Project>

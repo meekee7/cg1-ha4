@@ -66,8 +66,8 @@ void Image::generateTexture(){
 	// XXX
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	this->setMinFilter(GL_NEAREST);
-	this->setMagFilter(GL_NEAREST);
+	this->setMinFilter(GL_LINEAR);
+	this->setMagFilter(GL_LINEAR);
 	// INSERT YOUR CODE HERE
 
 	// END XXX
@@ -82,7 +82,7 @@ void Image::generateTexture(){
 	// upload texture data
 	// XXX
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	this->setModulation(GL_DECAL);
+	this->setModulation(GL_MODULATE);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this->width, this->height, 0, GL_RGBA, GL_FLOAT, &data[0]);
 	// INSERT YOUR CODE HERE
 

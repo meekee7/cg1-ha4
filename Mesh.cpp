@@ -1,4 +1,4 @@
-#include "Model.hpp"
+#include "Mesh.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -98,7 +98,7 @@ bool Mesh::loadOff(std::string filename){
 		for (int i = 0; i < nodes; i++) {//Normalize vertex normal vectors
 			this->normalizevector(node[i].normal);
 			{ //Calculate spherical texture coordinates
-				const GLfloat pi = 3.1415926f; //TODO get this correctly done
+				const GLfloat pi = 3.1415926f; //Professor Alexa hat gesagt, dass es akzeptabel ist und nicht perfekt lösbar ist, siehe Theorieaufgabe 4
 				GLfloat vlength = 2.0f * sqrtf(node[i].normal[0] * node[i].normal[0] + node[i].normal[1] * node[i].normal[1] + (1.0f + node[i].normal[2]) * (1.0f + node[i].normal[2]));
 				node[i].tex[0] = node[i].normal[0] / vlength + 0.5f; //http://www.unc.edu/~zimmons/cs238/maps/environment.html
 				node[i].tex[1] = node[i].normal[1] / vlength + 0.5f;

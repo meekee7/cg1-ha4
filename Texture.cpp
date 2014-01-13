@@ -31,12 +31,12 @@
 #include "Context.hpp"
 #include "Texture.hpp"
 #include "Image.hpp"
-#include "Model.hpp"
+#include "Mesh.hpp"
 
 using namespace glm;
 using namespace std;
 
-static const float PI = 3.14159265358979323846264338327950288;
+static const float PI = 3.14159265358979323846264338327950288f;
 
 // current state of mouse action
 typedef enum{
@@ -112,19 +112,19 @@ void Common::keyPressed(unsigned char key, int x, int y){
 		break;
 
 	case 's':
-		scaling *= 0.9;
+		scaling *= 0.9f;
 		break;
 
 	case 'S':
-		scaling *= 1.1;
+		scaling *= 1.1f;
 		break;
 
 	case 'c':
-		cameraZMap += 0.1;
+		cameraZMap += 0.1f;
 		break;
 
 	case 'C':
-		cameraZMap -= 0.1;
+		cameraZMap -= 0.1f;
 		break;
 
 	default:
@@ -194,7 +194,7 @@ void Texture::display(void){
 	glLoadIdentity();
 
 	// Set the viewport to be the entire window
-	glViewport(0, 0, screen.x, screen.y);
+	glViewport(0, 0, (GLsizei)screen.x, (GLsizei)screen.y);
 
 	gluOrtho2D(0, screen.x, 0, screen.y);
 
@@ -214,8 +214,10 @@ void Texture::display(void){
 	}
 	// INSERT YOUR CODE HERE
 	glEnable(GL_TEXTURE_2D);
+	glDisable(GL_LIGHTING);
 	texture.bind();
 	fullScreenQuad();
+	glEnable(GL_LIGHTING);
 	glDisable(GL_TEXTURE_2D);
 	// END XXX
 	glutSwapBuffers();
@@ -368,7 +370,7 @@ void World::reshape(int width, int height){
 void World::display(void){
 	if (meshes[meshnumber] == nullptr && meshnumber != 0 && meshnumber != 1){
 		//Draw a loading screen
-		glClearColor(0.2, 0.2, 0.2, 0.0);
+		glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glDisable(GL_LIGHTING);
 		glColor3ub(255, 255, 255);
@@ -391,23 +393,23 @@ void World::display(void){
 	glLoadIdentity();
 
 	// Set the viewport to be the entire window
-	glViewport(0, 0, screen.x, screen.y);
+	glViewport(0, 0, (GLsizei)screen.x, (GLsizei)screen.y);
 
-	cameraZ = 1 / tan(fov / 180.0);
+	cameraZ = 1.0f / tanf(fov / 180.0f);
 
 	// near and far plane
-	nearPlane = cameraZ / 10.0;
-	farPlane = cameraZ*10.0;
+	nearPlane = cameraZ / 10.0f;
+	farPlane = cameraZ*10.0f;
 
 	gluPerspective(fov, (float)screen.x / (float)screen.y, nearPlane, farPlane);
 
 	//position the camera at (0,0,cameraZ) looking down the
 	//negative z-axis at (0,0,0)
 	cameraMatrix = lookAt(vec3(0.0, 0.0, cameraZ), vec3(0.0, 0.0, 0.0), vec3(0.0, 1.0, 0.0));
-	glClearColor(0.2, 0.2, 0.2, 0.0);
+	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	
+
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -469,13 +471,15 @@ void World::display(void){
 	else glDisable(GL_LIGHTING);
 
 	// draw the geometry
-	
+
 
 	// if showTexture is true, enable texturing in opengl
 	// XXX
 	if (meshnumber != 0 && meshnumber != 1){
 		if (showTexture)
 			glEnable(GL_TEXTURE_2D);
+		else
+			glDisable(GL_TEXTURE_2D);
 		meshes[meshnumber]->render();
 		glDisable(GL_TEXTURE_2D);
 	}
@@ -550,17 +554,17 @@ void World::mouseDragged(int x, int y){
 		break;
 	case SHIFT_XY:
 		if (false){
-			shift.x += 3.3*v.x;
-			shift.y -= 3.3*v.y;
+			shift.x += 3.3f*v.x;
+			shift.y -= 3.3f*v.y;
 		}
 		else{
-			shift.x += 3.3*v.x;
-			shift.y -= 3.3*v.y;
+			shift.x += 3.3f*v.x;
+			shift.y -= 3.3f*v.y;
 		}
 		break;
 	case SHIFT_Z:
-		if (false) shift.z -= 3.3*sign(dot(v, vec2(1, 1))) * length(v);
-		else shift.z += 3.3*sign(dot(v, vec2(1, 1))) * length(v);
+		if (false) shift.z -= 3.3f*sign(dot(v, vec2(1, 1))) * length(v);
+		else shift.z += 3.3f*sign(dot(v, vec2(1, 1))) * length(v);
 		break;
 	case SCALE:
 		if (false) scaling -= sign(dot(v, vec2(1, 1))) * length(v);
