@@ -86,8 +86,8 @@ static void updateCursor(int x, int y){
 	float u = (float)x / screen.x;
 	float v = (float)y / screen.y;
 	float u_rad = 2 * PI * u;
-	cursor.x = sin(u_rad - PI / 2);
-	cursor.z = sin(u_rad);
+	cursor.z = sin(u_rad - PI / 2);
+	cursor.x = -sin(u_rad);
 	// y goes from +1 (north) to -1 (south)
 	// v from 0 to 1, hence:
 	// *2 to expand range, -1 to shift range & the whole *(-1) to flip it

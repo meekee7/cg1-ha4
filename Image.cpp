@@ -162,7 +162,7 @@ void Image::paint(float x, float y){
 	// XXX
 	x *= this->width;
 	y *= this->height;
-	const glm::vec4 colorpixel = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	const glm::vec4 colorpixel = vec4(1.0f, 0.0f, 0.0f, 1.0f); //red
 	//glm::vec4 colorpixel = this->get(x, y);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, (GLint)x, (GLint)y, 1, 1, GL_RGBA, GL_FLOAT, &colorpixel);
 	// INSERT YOUR CODE HERE
