@@ -100,7 +100,7 @@ bool Mesh::loadOff(std::string filename){
 			{ //Calculate spherical texture coordinates
 				//Professor Alexa hat gesagt, dass es akzeptabel ist und nicht perfekt lösbar ist, 
 				//siehe Theorieaufgabe 4, außerdem sieht es besser als in der Musterlösung aus
-				//trotzdem TODO überarbeiten
+				//trotzdem TODO überarbeiten, Musterlösung ist zum Painting-Cursor kompatibler
 				const GLfloat pi = 3.1415926f;
 				GLfloat vlength = 2.0f * sqrtf(node[i].normal[0] * node[i].normal[0] + node[i].normal[1] * node[i].normal[1] + (1.0f + node[i].normal[2]) * (1.0f + node[i].normal[2]));
 				node[i].tex[0] = node[i].normal[0] / vlength + 0.5f; //http://www.unc.edu/~zimmons/cs238/maps/environment.html

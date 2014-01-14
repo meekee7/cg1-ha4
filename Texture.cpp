@@ -82,16 +82,9 @@ static vec3 cursor = vec3(1, 0, 0);
 // XXX: NEEDS TO BE IMPLEMENTED
 static void updateCursor(int x, int y){
 
-	// XXX //TODO coordinates are completely wrong
-	float u = (float)x / screen.x;
-	float v = (float)y / screen.y;
-	float u_rad = 2 * PI * u;
-	cursor.z = sin(u_rad - PI / 2);
-	cursor.x = -sin(u_rad);
-	// y goes from +1 (north) to -1 (south)
-	// v from 0 to 1, hence:
-	// *2 to expand range, -1 to shift range & the whole *(-1) to flip it
-	cursor.y = -(v * 2 - 1);
+	// XXX 
+	float radius = 2 * PI * (x / screen.x);
+	cursor = vec3(-sin(radius), -((y / screen.y) * 2 - 1), sin(radius - PI / 2));
 	// INSERT YOUR CODE HERE
 
 
@@ -471,7 +464,7 @@ void World::display(void){
 
 	// draw cursor
 	// XXX
-	if (true) {
+	{
 		glDisable(GL_LIGHTING);
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_LINES); {
@@ -521,11 +514,24 @@ void World::display(void){
 	// END XXX
 
 	if (drawRect){
-
+		if (showTexture)
+			glEnable(GL_TEXTURE_2D);
+		else
+			glDisable(GL_TEXTURE_2D);
+		glBegin(GL_QUADS); {
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex2f(-1.0f, -1.0f);
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex2f(-1.0f, 1.0f);
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex2f(1.0f, 1.0f);
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex2f(1.0f, -1.0f);
+		}glEnd();
+		glDisable(GL_TEXTURE_2D);
 		// draw a textured quad
 		// XXX
 		// INSERT YOUR CODE HERE     
-
 
 		// END XXX
 	}
