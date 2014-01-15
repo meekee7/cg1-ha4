@@ -85,6 +85,7 @@ static void updateCursor(int x, int y){
 	// XXX 
 	float radius = 2 * PI * (x / screen.x);
 	cursor = vec3(-sin(radius), -((y / screen.y) * 2 - 1), sin(radius - PI / 2));
+
 	// INSERT YOUR CODE HERE
 
 
@@ -209,7 +210,7 @@ void Texture::display(void){
 	// display texture
 	// XXX
 	if (usedefaulttex) {
-		texture.load(textures[13]);
+		texture.load(textures[9]);
 		texture.generateTexture();
 		usedefaulttex = false;
 	}
@@ -340,8 +341,9 @@ string World::menuText[] = { "    reset", "MODEL", "    Plane", "    Spiky Spher
 int World::numOptions = sizeof(World::menuOptions) / sizeof(World::menuOptions[0]);
 
 static string models[] = { "", "", "data/4cow.off", "data/auto3.off", "data/bunny2.off", "data/cone.off", "data/cow.off", "data/cowboyhut.off", "data/MEGADRACHE.off", "data/Schachfigur.off", "data/tempel.off", "data/tasse.off", "data/spaceshuttle.off", "data/sphere.off" };
-int meshnumber = 0;
+int meshnumber = 13;
 Mesh* meshes[14];
+GLSLShader* evshader = nullptr;
 
 vec2 World::previousMouse;
 
@@ -487,7 +489,13 @@ void World::display(void){
 	else glDisable(GL_LIGHTING);
 
 	// draw the geometry
-
+	if (environmentMapping){
+		if (evshader == nullptr){
+			evshader = new GLSLShader();
+			evshader->load("envphong");
+		}
+		evshader->bindShader();
+	}
 
 	// if showTexture is true, enable texturing in opengl
 	// XXX
@@ -496,11 +504,17 @@ void World::display(void){
 			glEnable(GL_TEXTURE_2D);
 		else
 			glDisable(GL_TEXTURE_2D);
+		glPushMatrix();
+		//glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+		glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
+		//glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
 		meshes[meshnumber]->render();
+		glPopMatrix();
 		glDisable(GL_TEXTURE_2D);
 	}
 	// INSERT YOUR CODE HERE
-
+	if (environmentMapping)
+		evshader->unbindShader();
 	// END XXX
 
 	glColor3f(1, 1, 1);
@@ -508,7 +522,7 @@ void World::display(void){
 	// build matrices and pass them to shader
 	// REMEMBER when transforming: Environment appears mirrored in object
 	// XXX 
-
+	
 	// INSERT YOUR CODE HERE
 
 	// END XXX

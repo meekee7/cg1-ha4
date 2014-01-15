@@ -103,14 +103,40 @@ bool Mesh::loadOff(std::string filename){
 				//trotzdem TODO überarbeiten, Musterlösung ist zum Painting-Cursor kompatibler
 				const GLfloat pi = 3.1415926f;
 				GLfloat vlength = 2.0f * sqrtf(node[i].normal[0] * node[i].normal[0] + node[i].normal[1] * node[i].normal[1] + (1.0f + node[i].normal[2]) * (1.0f + node[i].normal[2]));
-				node[i].tex[0] = node[i].normal[0] / vlength + 0.5f; //http://www.unc.edu/~zimmons/cs238/maps/environment.html
-				node[i].tex[1] = node[i].normal[1] / vlength + 0.5f;
-				//node[i].tex[0] = asin(node[i].normal[0]) / pi + 0.5f; //http://www.mvps.org/directx/articles/spheremap.htm
-				//node[i].tex[1] = asin(node[i].normal[1]) / pi + 0.5f;
-				//node[i].tex[0] = atan2(node[i].node[0], node[i].node[1]) / pi + 0.5f;
-				//node[i].tex[1] = asin(node[i].node[2]) / pi + 0.5f;
-				//node[i].tex[0] = pi + atan2(node[i].normal[1], node[i].normal[0]) / (2 * pi);
-				//node[i].tex[1] = atan2(sqrtf(node[i].normal[0] * node[i].normal[0] + node[i].normal[1] * node[i].normal[1]), node[i].normal[2]) / pi;
+				switch (7){ //TODO remove this selector when the decision was made
+				case 0:
+					node[i].tex[0] = node[i].normal[0] / vlength + 0.5f; //http://www.unc.edu/~zimmons/cs238/maps/environment.html
+					node[i].tex[1] = node[i].normal[1] / vlength + 0.5f;
+					break;
+				case 1:
+					node[i].tex[0] = asin(node[i].normal[0]) / pi + 0.5f; //http://www.mvps.org/directx/articles/spheremap.htm
+					node[i].tex[1] = asin(node[i].normal[1]) / pi + 0.5f;
+					break;
+				case 2:
+					node[i].tex[0] = -atan2(node[i].normal[0], node[i].normal[1]) / pi * 0.5f;
+					node[i].tex[1] = asin(node[i].normal[2]) / pi + 0.5f;
+					break;
+				case 3: //Vorlesungsfolien
+					node[i].tex[0] = (pi + atan2f(node[i].normal[0], node[i].normal[1])) / (2 * pi);
+					node[i].tex[1] = -atan2f(sqrtf(node[i].normal[0] * node[i].normal[0] + node[i].normal[1] * node[i].normal[1]), node[i].normal[2]) / pi;
+					break;
+				case 4: //http://hub.jmonkeyengine.org/forum/topic/coordinate-conversion-and-sphere-mapping/
+					node[i].tex[1] = -asinf(node[i].normal[2] / sqrtf(node[i].normal[0] * node[i].normal[0] + node[i].normal[1] * node[i].normal[1] + node[i].normal[2] * node[i].normal[2]));// *pi;
+					node[i].tex[0] = atan2f(node[i].normal[1], node[i].normal[0]);// *pi;
+					break;
+				case 5:
+					node[i].tex[0] = (pi + atan2f(node[i].node[0], node[i].node[1])) / (2 * pi);
+					node[i].tex[1] = atan2f(sqrtf(node[i].node[0] * node[i].node[0] + node[i].node[1] * node[i].node[1]), node[i].node[2]) / pi;
+					break;
+				case 6: //http://www.blendpolis.de/viewtopic.php?f=14&t=37042
+					node[i].tex[0] = atan2f(node[i].normal[1] / node[i].normal[0], 0.5f) / pi;
+					node[i].tex[1] = node[i].normal[2] * 0.5f;
+					break;
+				case 7: //http://stackoverflow.com/questions/19723698/sphere-texture-mapping-error
+					node[i].tex[0] = 0.5f - atan2f(node[i].normal[2], node[i].normal[0]) / (2.0f * pi);
+					node[i].tex[1] = 0.5f + asinf(node[i].normal[1]) / pi;
+					break;
+				}
 			}
 		}
 	}

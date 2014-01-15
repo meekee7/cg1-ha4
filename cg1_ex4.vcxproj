@@ -25,6 +25,10 @@
     <ClInclude Include="Model.hpp" />
     <ClInclude Include="Texture.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="envphong.frag" />
+    <None Include="envphong.vert" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <Keyword>Win32Proj</Keyword>
     <ProjectName>cg1_ex4</ProjectName>

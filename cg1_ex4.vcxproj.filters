@@ -15,4 +15,8 @@
     <ClInclude Include="GLSLShader.h" />
     <ClInclude Include="Model.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="envphong.frag" />
+    <None Include="envphong.vert" />
+  </ItemGroup>
 </Project>
