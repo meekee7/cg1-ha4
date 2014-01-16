@@ -469,6 +469,8 @@ void World::display(void){
 	{
 		glDisable(GL_LIGHTING);
 		glDisable(GL_TEXTURE_2D);
+		glPushMatrix();
+		glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
 		glBegin(GL_LINES); {
 			GLfloat endpoint[3] = { cursor.x, cursor.y, cursor.z };
 			Mesh::normalizevector(endpoint);
@@ -476,8 +478,9 @@ void World::display(void){
 				endpoint[i] *= 1.1f;
 			glColor3ub(255, 255, 0);
 			glVertex3f(0.0f, 0.0f, 0.0f);
-			glVertex3fv(endpoint); //TODO actual values
+			glVertex3fv(endpoint);
 		}glEnd();
+		glPopMatrix();
 	}
 	// INSERT YOUR CODE HERE
 
@@ -506,7 +509,7 @@ void World::display(void){
 			glDisable(GL_TEXTURE_2D);
 		glPushMatrix();
 		//glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
-		glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
+		//glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
 		//glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
 		meshes[meshnumber]->render();
 		glPopMatrix();
