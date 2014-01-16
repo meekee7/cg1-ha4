@@ -498,20 +498,35 @@ void World::display(void){
 			evshader->load("envphong");
 		}
 		evshader->bindShader();
+		const float envrotate = moveEnvironment ? 1.0f : 0.0f;
+		evshader->setIntParam("envrotate", envrotate);
 	}
 
 	// if showTexture is true, enable texturing in opengl
 	// XXX
-	if (meshnumber != 0 && meshnumber != 1){
+	if (meshnumber != 0){
 		if (showTexture)
 			glEnable(GL_TEXTURE_2D);
 		else
 			glDisable(GL_TEXTURE_2D);
 		glPushMatrix();
-		//glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
-		//glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
-		//glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
-		meshes[meshnumber]->render();
+		if (!drawRect)
+			meshes[meshnumber]->render();
+		else {
+			glBegin(GL_QUADS); {
+				GLfloat normal[] = { 0.0f, -1.0f, 0.0f };
+				Mesh::normalizevector(normal);
+				glNormal3fv(normal);
+				glTexCoord2f(0.0f, 0.0f);
+				glVertex2f(-1.0f, -1.0f);
+				glTexCoord2f(0.0f, 1.0f);
+				glVertex2f(-1.0f, 1.0f);
+				glTexCoord2f(1.0f, 1.0f);
+				glVertex2f(1.0f, 1.0f);
+				glTexCoord2f(1.0f, 0.0f);
+				glVertex2f(1.0f, -1.0f);
+			}glEnd();
+		}
 		glPopMatrix();
 		glDisable(GL_TEXTURE_2D);
 	}
@@ -525,33 +540,10 @@ void World::display(void){
 	// build matrices and pass them to shader
 	// REMEMBER when transforming: Environment appears mirrored in object
 	// XXX 
-	
+
 	// INSERT YOUR CODE HERE
 
 	// END XXX
-
-	if (drawRect){
-		if (showTexture)
-			glEnable(GL_TEXTURE_2D);
-		else
-			glDisable(GL_TEXTURE_2D);
-		glBegin(GL_QUADS); {
-			glTexCoord2f(0.0f, 0.0f);
-			glVertex2f(-1.0f, -1.0f);
-			glTexCoord2f(0.0f, 1.0f);
-			glVertex2f(-1.0f, 1.0f);
-			glTexCoord2f(1.0f, 1.0f);
-			glVertex2f(1.0f, 1.0f);
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex2f(1.0f, -1.0f);
-		}glEnd();
-		glDisable(GL_TEXTURE_2D);
-		// draw a textured quad
-		// XXX
-		// INSERT YOUR CODE HERE     
-
-		// END XXX
-	}
 
 	// else draw model
 	// XXX
