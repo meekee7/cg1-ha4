@@ -510,13 +510,15 @@ void World::display(void){
 		else
 			glDisable(GL_TEXTURE_2D);
 		glPushMatrix();
+		if (moveEnvironment){
+			glLoadIdentity();
+			glMultMatrixf(&cameraMatrix[0][0]);
+		}
 		if (!drawRect)
 			meshes[meshnumber]->render();
 		else {
 			glBegin(GL_QUADS); {
-				GLfloat normal[] = { 0.0f, -1.0f, 0.0f };
-				Mesh::normalizevector(normal);
-				glNormal3fv(normal);
+				glNormal3f(0.0f, -1.0f, 0.0f);
 				glTexCoord2f(0.0f, 0.0f);
 				glVertex2f(-1.0f, -1.0f);
 				glTexCoord2f(0.0f, 1.0f);
