@@ -57,7 +57,7 @@ public:
 	void unbindShader()const;
 
 	// Set an int uniform variable
-	void setIntParam(const char* pname, const float& value);
+	void setIntParam(const char* pname, const int& value);
 
 	// Set a float uniform variable
 	void setFloatParam(const char* pname, const float& value);

@@ -498,7 +498,9 @@ void World::display(void){
 			evshader->load("envphong");
 		}
 		evshader->bindShader();
-		const float envrotate = moveEnvironment ? 1.0f : 0.0f;
+		const int envrotate = moveEnvironment ? 1 : 0;
+		const int light = lighting ? 1 : 0;
+		evshader->setIntParam("lighting", light);
 		evshader->setIntParam("envrotate", envrotate);
 	}
 

@@ -52,7 +52,7 @@ void GLSLShader::unbindShader()const
 	glUseProgram(0);
 }
 
-void GLSLShader::setIntParam(const char* pname, const float& value)
+void GLSLShader::setIntParam(const char* pname, const int& value)
 {
 	// Get from openGL the location of the variable pname
 	// (lazy way, should be stored but this works)
