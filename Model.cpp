@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <cstring>
 using namespace std;
 Mesh::Mesh()
 {
@@ -41,7 +42,7 @@ bool Mesh::loadOff(std::string filename){
 		for (int i = 0; i < nodes; i++)
 		if (getline(modelfile, line)){
 			std::istringstream istr(line);
-			std::memset(node[i].normal, 0, 3 * sizeof GLfloat);
+			std::memset(node[i].normal, 0, 3 * sizeof(GLfloat));
 			istr >> node[i].node[0] >> node[i].node[1] >> node[i].node[2];
 		}
 		else {
