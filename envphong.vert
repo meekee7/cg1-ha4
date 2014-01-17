@@ -16,7 +16,10 @@ void main() {
 		//if (envrotate == 1.0)
 			//gl_TexCoord[1] =  * gl_TexCoord[1];
 }
-/* //Das hier ist aus der Musterlösung extrahiert
+
+
+
+/* //Extracted from the sample solution
 varying vec3 normal;
 varying vec3 reflection;
 uniform mat4 cameraMatrix;

@@ -98,15 +98,13 @@ bool Mesh::loadOff(std::string filename){
 		for (int i = 0; i < nodes; i++) {//Normalize vertex normal vectors
 			this->normalizevector(node[i].normal);
 			{ //Calculate spherical texture coordinates
-				//Professor Alexa hat gesagt, dass es akzeptabel ist und nicht perfekt lösbar ist, 
-				//siehe Theorieaufgabe 4, außerdem sieht es besser als in der Musterlösung aus
-				//trotzdem TODO überarbeiten, Musterlösung ist zum Painting-Cursor kompatibler
-				const GLfloat pi = 3.1415926f;
-				GLfloat vlength = 2.0f * sqrtf(node[i].normal[0] * node[i].normal[0] + node[i].normal[1] * node[i].normal[1] + (1.0f + node[i].normal[2]) * (1.0f + node[i].normal[2]));
-				switch (7){ //TODO remove this selector when the decision was made
+				const GLfloat pi = 3.1415926f; //TODO find optimal algorithm
+				GLfloat modlength = 2.0f * sqrtf(node[i].normal[0] * node[i].normal[0] + node[i].normal[1] * node[i].normal[1] + (1.0f + node[i].normal[2]) * (1.0f + node[i].normal[2]));
+				//This selector is for debugging, so we can easily test another formula
+				switch (7){ //TODO remove this selector and the unused algorithms when the decision was made
 				case 0:
-					node[i].tex[0] = node[i].normal[0] / vlength + 0.5f; //http://www.unc.edu/~zimmons/cs238/maps/environment.html
-					node[i].tex[1] = node[i].normal[1] / vlength + 0.5f;
+					node[i].tex[0] = node[i].normal[0] / modlength + 0.5f; //http://www.unc.edu/~zimmons/cs238/maps/environment.html
+					node[i].tex[1] = node[i].normal[1] / modlength + 0.5f;
 					break;
 				case 1:
 					node[i].tex[0] = asin(node[i].normal[0]) / pi + 0.5f; //http://www.mvps.org/directx/articles/spheremap.htm
@@ -168,7 +166,7 @@ void Mesh::render(){
 
 void Mesh::normalizevector(GLfloat* vector){
 	GLfloat scale = vector[0] * vector[0] + vector[1] * vector[1] + vector[2] * vector[2];
-	int integer = 0x5f3759df - (*(long*)&scale >> 1); //Using fast inverse square root algorithm
+	int integer = 0x5f3759df - (*(long*)&scale >> 1); //Using the fast inverse square root algorithm
 	GLfloat isr = *(GLfloat*)&integer;
 	isr *= 1.5f - (scale * 0.5f * isr * isr); //One iteration should be precise enough
 	//isr *= 1.5f - (scale * 0.5f * isr * isr);
@@ -208,10 +206,13 @@ void Mesh::renderSmooth(){
 void Mesh::renderTextured(){
 	for (int i = 0; i < polygons; i++){
 		glBegin(GL_TRIANGLES); {
-			for (int j = 0; j < polygon[i].size; j++){
-				glTexCoord2f(node[polygon[i].nodes[j]].tex[0], node[polygon[i].nodes[j]].tex[1]);
-				glNormal3f(node[polygon[i].nodes[j]].normal[0], node[polygon[i].nodes[j]].normal[1], node[polygon[i].nodes[j]].normal[2]);
-				glVertex3f(node[polygon[i].nodes[j]].node[0], node[polygon[i].nodes[j]].node[1], node[polygon[i].nodes[j]].node[2]);
+			for (int j = 0; j < polygon[i].size; j++){ //Same as smooth, but assign texture
+				glTexCoord2fv(&node[polygon[i].nodes[j]].tex[0]);
+				glNormal3fv(&node[polygon[i].nodes[j]].normal[0]);
+				glVertex3fv(&node[polygon[i].nodes[j]].node[0]);
+				//glTexCoord2f(node[polygon[i].nodes[j]].tex[0], node[polygon[i].nodes[j]].tex[1]);
+				//glNormal3f(node[polygon[i].nodes[j]].normal[0], node[polygon[i].nodes[j]].normal[1], node[polygon[i].nodes[j]].normal[2]);
+				//glVertex3f(node[polygon[i].nodes[j]].node[0], node[polygon[i].nodes[j]].node[1], node[polygon[i].nodes[j]].node[2]);
 			}
 		} glEnd();
 	}

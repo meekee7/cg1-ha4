@@ -83,9 +83,12 @@ static vec3 cursor = vec3(1, 0, 0);
 static void updateCursor(int x, int y){
 
 	// XXX 
+	//TODO this is not ideal so far and drifts off , enhance this
+	//This is also related to the spherical texture mapping algorithm
 	float radius = 2 * PI * (x / screen.x);
 	cursor = vec3(-sin(radius), -((y / screen.y) * 2 - 1), sin(radius - PI / 2));
-
+	//IMPORTANT NODE: currently, this vector is later normalized, scaled and rotate by +90/0/1/0
+	//maybe this has to be modified, especially the rotation
 	// INSERT YOUR CODE HERE
 
 
