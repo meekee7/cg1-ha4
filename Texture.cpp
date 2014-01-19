@@ -173,7 +173,7 @@ string Texture::menuText[] = { "TOOLS:", "    Pen", "    Eraser",
 
 int Texture::numOptions = sizeof(Texture::menuOptions) / sizeof(Texture::menuOptions[0]);
 
-string textures[] = { "", "data/earthcyl2.ppm", "data/earth2.ppm", "data/earthlights.ppm", "data/saturncyl1.ppm", "data/marble.ppm", "data/stpeters.ppm", "data/uffizi.ppm", "data/supernova.ppm", "data/test5b.ppm", "data/test7b.ppm", "data/test6b.ppm", "data/checker2.ppm", "data/test3b.ppm", "data/test4b.ppm", "data/test2b.ppm", "data/test8b.ppm" };
+string textures[] = { "", "data/earthcyl2.ppm", "data/earth2.ppm", "data/earthlights.ppm", "data/saturncyl1.ppm", "data/marble.ppm", "data/stpeters.ppm", "data/uffizi.ppm", "data/supernova.ppm", "data/test5b.ppm", "data/test7b.ppm", "data/test6b.ppm", "data/checker2.ppm", "data/test3b.ppm", "data/test4b.ppm", "data/test2b.ppm", "data/test8b.ppm", "data/blackcircle.ppm", "data/whitecircle.ppm" };
 
 vec2 Texture::previousMouse; // previous mouse position
 
@@ -265,8 +265,11 @@ void Texture::mouseMoved(int x, int y){
 // menu callback
 // XXX: NEEDS TO BE IMPLEMENTED
 void Texture::menu(int value){
-
+	cout << value << "\n";
 	switch (value){
+	case 27:
+	case 28:
+		value -= 10; //purposely no break here
 	case 1:
 	case 2:
 	case 3:
@@ -285,8 +288,12 @@ void Texture::menu(int value){
 	case 16:
 		texture.load(textures[value]);
 		texture.generateTexture();
-		if (value < 6) environmentMapping = false;
-		else if (value < 13) environmentMapping = true;
+		if (value < 6) 
+			environmentMapping = false;
+		else if (value < 13) 
+			environmentMapping = true;
+		else if (value > 16)
+			environmentMapping = true;
 		break;
 	case 17:
 		drag = DRAW;
@@ -503,8 +510,13 @@ void World::display(void){
 		evshader->bindShader();
 		const int envrotate = moveEnvironment ? 1 : 0;
 		const int light = lighting ? 1 : 0;
+		glm::mat4 rotatemat;
+		for (int i = 0; i < 4; i++)
+		for (int j = 0; j < 4; j++)
+			rotatemat[i][j] = rotation[i][j];
 		evshader->setIntParam("lighting", light);
 		evshader->setIntParam("envrotate", envrotate);
+		evshader->setMatrix4Param("rotatemat", rotatemat);
 	}
 
 	// if showTexture is true, enable texturing in opengl

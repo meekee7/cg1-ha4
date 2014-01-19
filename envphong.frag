@@ -1,3 +1,4 @@
+#version 140
 uniform sampler2D envMap;
 uniform int lighting;
 
@@ -48,7 +49,8 @@ void main(){
 	} 
 	vec3 r= normalize(reflection); 
 	float p= sqrt(r.x*r.x+r.y*r.y+(1.0+r.z)*(1.0+r.z));  
-	vec2 coord= vec2(r.x, r.y);  float m= sqrt(2.0*(r.z+1.0));  
+	vec2 coord= vec2(r.x, r.y);  
+	float m= sqrt(2.0*(r.z+1.0));  
 	coord/= m;  
 	coord*= 0.5;  
 	coord+= 0.5;  
@@ -58,5 +60,5 @@ void main(){
 		color*= texture2D(sphereMap, coord); 
 	else    
 		color= texture2D(sphereMap, coord); 
-		gl_FragColor= color;
+	gl_FragColor= color;
 } */
