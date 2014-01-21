@@ -288,9 +288,9 @@ void Texture::menu(int value){
 	case 16:
 		texture.load(textures[value]);
 		texture.generateTexture();
-		if (value < 6) 
+		if (value < 6)
 			environmentMapping = false;
-		else if (value < 13) 
+		else if (value < 13)
 			environmentMapping = true;
 		else if (value > 16)
 			environmentMapping = true;
@@ -511,12 +511,16 @@ void World::display(void){
 		const int envrotate = moveEnvironment ? 1 : 0;
 		const int light = lighting ? 1 : 0;
 		glm::mat4 rotatemat;
+		glm::mat4 cameramat;
 		for (int i = 0; i < 4; i++)
-		for (int j = 0; j < 4; j++)
-			rotatemat[i][j] = rotation[i][j];
+			for (int j = 0; j < 4; j++){
+				rotatemat[i][j] = rotation[i][j];
+				cameramat[i][j] = cameraMatrix[i][j];
+			}
 		evshader->setIntParam("lighting", light);
 		evshader->setIntParam("envrotate", envrotate);
 		evshader->setMatrix4Param("rotatemat", rotatemat);
+		evshader->setMatrix4Param("cameramat", cameramat);
 	}
 
 	// if showTexture is true, enable texturing in opengl
@@ -544,7 +548,7 @@ void World::display(void){
 				glVertex2f(1.0f, 1.0f);
 				glTexCoord2f(1.0f, 0.0f);
 				glVertex2f(1.0f, -1.0f);
-			}glEnd();
+			} glEnd();
 		}
 		glPopMatrix();
 		glDisable(GL_TEXTURE_2D);

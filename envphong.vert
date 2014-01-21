@@ -1,6 +1,7 @@
 #version 140
 uniform int envrotate;
 uniform mat4 rotatemat;
+uniform mat4 cameramat;
 varying vec3 normal;
 varying vec3 vertex;
 
@@ -12,9 +13,9 @@ void main() {
 		gl_TexCoord[0] = gl_MultiTexCoord0;
         vec3 r;
 		if (envrotate == 0)
-			r = reflect(normalize(vec3((gl_ModelViewMatrix) * gl_Vertex)), normalize((gl_NormalMatrix) * gl_Normal));
+			r = reflect(normalize(vertex), normal);
 		else 
-			r = reflect(normalize(vec3((gl_ModelViewMatrix * rotatemat) * gl_Vertex)), normalize(mat3(inverse(transpose(gl_ModelViewMatrix * rotatemat))) * gl_Normal));
+			r = -1.0 * reflect(normalize(vec3(transpose(cameramat * rotatemat) * gl_Vertex)), vec3(normalize(transpose(inverse(transpose(cameramat * rotatemat))) * vec4(gl_Normal, 0.0))));
 		r.z += 1.0;
 		float m = 2.0 * length(r);
 		gl_TexCoord[1].s = r.x / m + 0.5;
