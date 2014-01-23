@@ -13,8 +13,13 @@ void main() {
 		float m = 2.0 * length(r);
 		gl_TexCoord[1].s = r.x / m + 0.5;
         gl_TexCoord[1].t = r.y / m + 0.5;
-		//if (envrotate == 1.0)
-			//gl_TexCoord[1] =  * gl_TexCoord[1];
+		if (envrotate == 1){
+			r = reflect(normalize(vec3(transpose(gl_ModelViewMatrix) * gl_Vertex)), normalize(transpose(gl_NormalMatrix) * gl_Normal));
+			r.z += 1.0;
+			float m = 2.0 * length(r);
+			gl_TexCoord[1].s = r.x / m + 0.5;
+			gl_TexCoord[1].t = r.y / m + 0.5;
+		}
 }
 
 
