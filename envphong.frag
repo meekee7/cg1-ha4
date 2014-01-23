@@ -10,16 +10,15 @@ void main() { //This is our Blinn-Phong-Shader from the 3rd assignment, but inst
 			vec3 light = normalize(vec3(gl_LightSource[0].position) - vertex);
 			vec3 eye = normalize(-vertex); //use -vertex because vertex is in eye space (0,0,0), direction from surface to eye is needed
 			vec3 halfv = normalize(eye + light); //half vector //always add ambient light
-		    vec4 evmpixcolour = texture2D(envMap, gl_TexCoord[1].st);
-			gl_FragColor = evmpixcolour * (gl_LightSource[0].ambient + gl_LightModel.ambient);
+			gl_FragColor = gl_FrontMaterial.ambient * (gl_LightSource[0].ambient + gl_LightModel.ambient);
 			float ndotl = dot(normal, light);
 			if (ndotl > 0.0) { //check light direction, add diffuse/specular light only if reflection is possible
-					gl_FragColor += evmpixcolour * gl_LightSource[0].diffuse * ndotl; //add diffuse light
+					gl_FragColor += gl_FrontMaterial.diffuse * gl_LightSource[0].diffuse * ndotl; //add diffuse light
 					float ndoth = dot(normal, halfv); 
 					if (ndoth > 0.0) //Add specular light when necessary
-				            gl_FragColor += evmpixcolour * gl_LightSource[0].specular * pow(ndoth, gl_FrontMaterial.shininess);
+				            gl_FragColor += gl_FrontMaterial.specular * gl_LightSource[0].specular * pow(ndoth, gl_FrontMaterial.shininess);
 			}
-			gl_FragColor *= 0.35; //set current pixel colour, but dim it
+			gl_FragColor *= texture2D(envMap, gl_TexCoord[1].st); //set current pixel colour
 		} else //No lighting, just assign directly from the environment map
 			gl_FragColor = texture2D(envMap, gl_TexCoord[1].st);
 }

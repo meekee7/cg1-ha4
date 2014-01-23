@@ -99,7 +99,7 @@ bool Mesh::loadOff(std::string filename){
 		for (int i = 0; i < nodes; i++) {//Normalize vertex normal vectors
 			this->normalizevector(node[i].normal);
 			{ //Calculate spherical texture coordinates
-				const GLfloat pi = 3.1415926f; //TODO find optimal algorithm
+				const GLfloat pi = 3.141592635898f; //TODO find optimal algorithm
 				GLfloat modlength = 2.0f * sqrtf(node[i].normal[0] * node[i].normal[0] + node[i].normal[1] * node[i].normal[1] + (1.0f + node[i].normal[2]) * (1.0f + node[i].normal[2]));
 				//This selector is for debugging, so we can easily test another formula
 				switch (7){ //TODO remove this selector and the unused algorithms when the decision was made
@@ -116,7 +116,7 @@ bool Mesh::loadOff(std::string filename){
 					node[i].tex[1] = asin(node[i].normal[2]) / pi + 0.5f;
 					break;
 				case 3: //Vorlesungsfolien
-					node[i].tex[0] = (pi + atan2f(node[i].normal[0], node[i].normal[1])) / (2 * pi);
+					node[i].tex[0] = (pi + atan2f(node[i].normal[1], node[i].normal[0])) / (2 * pi);
 					node[i].tex[1] = -atan2f(sqrtf(node[i].normal[0] * node[i].normal[0] + node[i].normal[1] * node[i].normal[1]), node[i].normal[2]) / pi;
 					break;
 				case 4: //http://hub.jmonkeyengine.org/forum/topic/coordinate-conversion-and-sphere-mapping/
@@ -135,9 +135,14 @@ bool Mesh::loadOff(std::string filename){
 					node[i].tex[0] = 0.5f - atan2f(node[i].normal[2], node[i].normal[0]) / (2.0f * pi);
 					node[i].tex[1] = 0.5f + asinf(node[i].normal[1]) / pi;
 					break;
+				case 8:
+					node[i].tex[0] = (pi + atan2f(node[i].node[1], node[i].node[0])) / (2 * pi);
+					node[i].tex[1] = -atan2f(sqrtf(node[i].node[0] * node[i].node[0] + node[i].node[1] * node[i].node[1]), node[i].node[2]) / pi;
+					break;
 				}
 			}
 		}
+		//this->printmesh();
 	}
 	else
 		return false; //error because file was not opened

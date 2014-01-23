@@ -160,8 +160,7 @@ vec4 Image::get(unsigned int x, unsigned int y){
 // XXX: NEEDS TO BE IMPLEMENTED
 void Image::paint(float x, float y){
 	// XXX
-	x *= this->width;
-	y *= this->height;
+	x, y *= this->width;
 	const glm::vec4 colorpixel = vec4(1.0f, 0.0f, 0.0f, 1.0f); //red
 	//glm::vec4 colorpixel = this->get(x, y);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, (GLint)x, (GLint)y, 1, 1, GL_RGBA, GL_FLOAT, &colorpixel);
