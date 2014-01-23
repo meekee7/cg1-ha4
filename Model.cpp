@@ -120,8 +120,8 @@ bool Mesh::loadOff(std::string filename){
 					node[i].tex[1] = -atan2f(sqrtf(node[i].normal[0] * node[i].normal[0] + node[i].normal[1] * node[i].normal[1]), node[i].normal[2]) / pi;
 					break;
 				case 4: //http://hub.jmonkeyengine.org/forum/topic/coordinate-conversion-and-sphere-mapping/
-					node[i].tex[1] = -asinf(node[i].normal[2] / sqrtf(node[i].normal[0] * node[i].normal[0] + node[i].normal[1] * node[i].normal[1] + node[i].normal[2] * node[i].normal[2]));// *pi;
-					node[i].tex[0] = atan2f(node[i].normal[1], node[i].normal[0]);// *pi;
+					node[i].tex[1] = -asinf(node[i].normal[2] / sqrtf(node[i].normal[0] * node[i].normal[0] + node[i].normal[1] * node[i].normal[1] + node[i].normal[2] * node[i].normal[2])) /pi;
+					node[i].tex[0] = atan2f(node[i].normal[1], node[i].normal[0]) /pi;
 					break;
 				case 5:
 					node[i].tex[0] = (pi + atan2f(node[i].node[0], node[i].node[1])) / (2 * pi);
