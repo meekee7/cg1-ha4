@@ -1,4 +1,7 @@
+#version 140
 uniform int envrotate;
+uniform mat4 rotatemat;
+uniform mat4 cameramat;
 varying vec3 normal;
 varying vec3 vertex;
 
@@ -6,22 +9,18 @@ void main() {
         normal = normalize(gl_NormalMatrix * gl_Normal); //transform normal into eye space
         vertex = vec3(gl_ModelViewMatrix * gl_Vertex); //set vertex position in eye space
         gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex; //set correct position
-        
+
 		gl_TexCoord[0] = gl_MultiTexCoord0;
-        vec3 r = reflect(normalize(vec3(gl_ModelViewMatrix * gl_Vertex)), normalize(gl_NormalMatrix * gl_Normal));
+        vec3 r;
+		if (envrotate == 0)
+			r = reflect(normalize(vertex), normal);
+		else 
+			r = -1.0 * reflect(normalize(vec3(transpose(cameramat * rotatemat) * gl_Vertex)), vec3(normalize(transpose(inverse(transpose(cameramat * rotatemat))) * vec4(gl_Normal, 0.0))));
 		r.z += 1.0;
 		float m = 2.0 * length(r);
 		gl_TexCoord[1].s = r.x / m + 0.5;
         gl_TexCoord[1].t = r.y / m + 0.5;
-		if (envrotate == 1){
-			r = reflect(normalize(vec3(transpose(gl_ModelViewMatrix) * gl_Vertex)), normalize(transpose(gl_NormalMatrix) * gl_Normal));
-			r.z += 1.0;
-			float m = 2.0 * length(r);
-			gl_TexCoord[1].s = r.x / m + 0.5;
-			gl_TexCoord[1].t = r.y / m + 0.5;
-		}
 }
-
 
 
 /* //Extracted from the sample solution
