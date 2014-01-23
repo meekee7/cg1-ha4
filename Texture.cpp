@@ -173,7 +173,7 @@ string Texture::menuText[] = { "TOOLS:", "    Pen", "    Eraser",
 
 int Texture::numOptions = sizeof(Texture::menuOptions) / sizeof(Texture::menuOptions[0]);
 
-string textures[] = { "", "data/earthcyl2.ppm", "data/earth2.ppm", "data/earthlights.ppm", "data/saturncyl1.ppm", "data/marble.ppm", "data/stpeters.ppm", "data/uffizi.ppm", "data/supernova.ppm", "data/test5b.ppm", "data/test7b.ppm", "data/test6b.ppm", "data/checker2.ppm", "data/test3b.ppm", "data/test4b.ppm", "data/test2b.ppm", "data/test8b.ppm", "data/blackflat.ppm", "data/whitecircle.ppm" };
+string textures[] = { "", "data/earthcyl2.ppm", "data/earth2.ppm", "data/earthlights.ppm", "data/saturncyl1.ppm", "data/marble.ppm", "data/stpeters.ppm", "data/uffizi.ppm", "data/supernova.ppm", "data/test5b.ppm", "data/test7b.ppm", "data/test6b.ppm", "data/checker2.ppm", "data/test3b.ppm", "data/test4b.ppm", "data/test2b.ppm", "data/test8b.ppm", "data/blackcircle.ppm", "data/blackplane.ppm" };
 
 vec2 Texture::previousMouse; // previous mouse position
 
@@ -265,7 +265,6 @@ void Texture::mouseMoved(int x, int y){
 // menu callback
 // XXX: NEEDS TO BE IMPLEMENTED
 void Texture::menu(int value){
-	cout << value << "\n";
 	switch (value){
 	case 27:
 	case 28:
